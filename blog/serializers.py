@@ -2,6 +2,7 @@ from rest_framework.relations import HyperlinkedIdentityField
 from rest_framework.serializers import HyperlinkedModelSerializer, ModelSerializer
 from rest_framework import serializers
 from rest_framework_nested.relations import NestedHyperlinkedRelatedField
+from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 
 from .models import Blog, BlogCategory, Comments
 
@@ -20,17 +21,17 @@ class BlogListSerializer(HyperlinkedModelSerializer):
         exclude = ['active', 'text']
 
 
-# class CommentsSerializer(ModelSerializer):
-class CommentsSerializer(HyperlinkedModelSerializer):
+# moshkel inheritance in bood
+class CommentsSerializer(NestedHyperlinkedModelSerializer):
     user = serializers.StringRelatedField()
     blog = serializers.StringRelatedField()
+    parent_lookup_kwargs = {'blog_pk': 'blog__pk'}
 
     class Meta:
         model = Comments
         fields = "__all__"
 
 
-## inam fekr konam bayad hyperlink bashe
 class BlogDetailSerializer(HyperlinkedModelSerializer):
     # comment = HyperlinkedIdentityField(
     #     view_name='comments-list',
